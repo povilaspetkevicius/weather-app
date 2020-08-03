@@ -1,0 +1,13 @@
+.Map {
+	border-radius: 20px;
+	border-style: dashed;
+	border-color: #e6bb5f;
+	width: auto;
+	height: auto;
+	min-width: 80%;
+	min-height: 80%;
+	margin: 10px;
+}
+div.Map > p {
+	margin: 20px;
+}
