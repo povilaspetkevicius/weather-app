@@ -5,6 +5,11 @@ const places = (state = [], action) => {
 				...state,
 				places: action.payload,
 			};
+		case 'SET_SELECTED_PLACE':
+			return {
+				...state,
+				selectedPlace: action.payload,
+			};
 		default:
 			return state;
 	}

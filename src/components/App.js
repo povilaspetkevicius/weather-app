@@ -5,7 +5,7 @@ import WeatherSection from './weather-section/WeatherSection';
 import 'weather-icons/css/weather-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import allActions from '../actions';
 import constants from '../shared/index';
@@ -28,7 +28,7 @@ function App() {
 	useEffect(() => {
 		fetchPlaces()
 			.then(
-				(places) => dispatch(allActions.placesActions.addAll(places)),
+				(places) => dispatch(allActions.placesActions.addAllPlaces(places)),
 				setErrorMsg({ show: false }),
 			)
 			.catch((e) =>
