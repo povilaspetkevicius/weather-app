@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
-import { useSelector, useDispatch } from 'react-redux';
-import { createSelector } from 'reselect';
-import allActions from '../../../actions';
-
-const getPlaces = (state) => state.places;
-
-const getPlaceNamesAndCodes = createSelector([getPlaces], (places) => {
-	if (places.places) {
-		return Object.values(places.places).map((place) => {
-			return {
-				name: place.name,
-				code: place.code,
-			};
-		});
-	}
-	return places;
-});
+import { useDispatch } from 'react-redux';
+import allActions from '../../actions';
 
 function PlaceSelector(props) {
 	const [suggestions, setSuggestions] = useState([]);
@@ -79,44 +63,4 @@ function PlaceSelector(props) {
 	);
 }
 
-function ShortTermForecast() {
-	const places = useSelector(getPlaceNamesAndCodes);
-
-	return (
-		<Container>
-			<Row>
-				<PlaceSelector places={places} />
-			</Row>
-			<Row>
-				<span>Gotham</span>
-			</Row>
-			<Row>
-				<input
-					id="timeSlider"
-					type="range"
-					min="0"
-					defaultValue="0"
-					max="12"
-					step="1"
-				/>
-			</Row>
-			<Row>
-				{' '}
-				<span>Time</span>
-			</Row>
-			<Row>
-				{' '}
-				<span>Temperature</span>
-			</Row>
-			<Row>
-				{' '}
-				<span>Windspeed</span>
-			</Row>
-			<Row>
-				<i className={`wi wi-day-sunny display-1`}></i>
-			</Row>
-		</Container>
-	);
-}
-
-export default ShortTermForecast;
+export default PlaceSelector;

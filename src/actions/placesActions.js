@@ -12,4 +12,11 @@ const setSelectedPlace = (placeCode) => {
 	};
 };
 
-export default { addAllPlaces, setSelectedPlace };
+const updatePlace = (place) => {
+	return {
+		type: 'UPDATE_PLACE',
+		payload: place,
+	};
+};
+
+export default { addAllPlaces, setSelectedPlace, updatePlace };

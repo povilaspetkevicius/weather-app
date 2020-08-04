@@ -1,11 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import './Map.css';
-function Map(props) {
-	return (
+function Map() {
+	const selectedPlace = useSelector((store) => store.places.selectedPlace);
+	return selectedPlace ? (
 		<div className="Map">
-			<p>Here you should see a map</p>
+			<p>Here should be a map</p>
 		</div>
-	);
+	) : null;
 }
 
 export default Map;
