@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -6,11 +6,27 @@ import allActions from '../../actions';
 import axios from 'axios';
 import constants from '../../shared/index';
 import PlaceSelector from './PlaceSelector';
-const getPlaces = (state) => state.places;
+
+const getSelectedPlace = (state) => state.places.selectedPlace;
+const getPlaces = (state) => state.places.places;
+
+const getDetailedPlace = createSelector(
+	[getPlaces, getSelectedPlace],
+	(places, selectedPlace) => {
+		console.log(places.places, selectedPlace);
+		return places.length && selectedPlace
+			? places.find(
+					(place) =>
+						place.code === selectedPlace.code &&
+						place.name === selectedPlace.name,
+			  )
+			: {};
+	},
+);
 
 const getPlaceNamesAndCodes = createSelector([getPlaces], (places) => {
-	if (places.places) {
-		return Object.values(places.places).map((place) => {
+	if (places) {
+		return Object.values(places).map((place) => {
 			return {
 				name: place.name,
 				code: place.code,
@@ -34,9 +50,9 @@ const fetchAdditionalPlaceInfo = (place) => {
 function WeatherSection() {
 	const places = useSelector(getPlaceNamesAndCodes);
 
-	const selectedPlace = useSelector((store) => store.places.selectedPlace);
+	const selectedPlace = useSelector(getSelectedPlace);
 
-	const [placeDetails, setPlaceDetails] = useState({});
+	const placeDetails = useSelector(getDetailedPlace);
 
 	const dispatch = useDispatch();
 
@@ -44,21 +60,22 @@ function WeatherSection() {
 		if (selectedPlace) {
 			fetchAdditionalPlaceInfo(selectedPlace).then((response) => {
 				dispatch(allActions.placesActions.updatePlace(response));
-				setPlaceDetails(response);
 			});
 		}
 	}, [selectedPlace]);
+
+	console.log(placeDetails);
 
 	return (
 		<Container>
 			<Row>
 				<PlaceSelector places={places} />
 			</Row>
-			{placeDetails && placeDetails.place && (
+			{Object.keys(placeDetails).length > 0 && (
 				<div>
 					<Row>
-						{placeDetails.place.name}, {placeDetails.place.country}{' '}
-						{placeDetails.place.countryCode}
+						{placeDetails.name}, {placeDetails.country}{' '}
+						{placeDetails.countryCode}
 					</Row>
 					<Row>
 						<input type="range" min="0" defaultValue="0" max="12" step="1" />

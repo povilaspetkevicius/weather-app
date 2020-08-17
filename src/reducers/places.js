@@ -13,22 +13,23 @@ const places = (state = { places: [], selectedPlace: null }, action) => {
 		case 'UPDATE_PLACE':
 			return {
 				...state,
-				places: updatePlaces(state, action.payload.place),
+				places: updatePlaces(state, action.payload),
 			};
 		default:
 			return state;
 	}
 };
 
-const updatePlaces = (state, placeToUpdate) => {
+const updatePlaces = (state, payload) => {
 	return state.places.map((place) => {
-		if (place.code !== placeToUpdate.code) {
+		if (place.code !== payload.place.code) {
 			return place;
 		}
 		return {
 			...place,
-			coordinates: placeToUpdate.coordinates,
-			country: placeToUpdate.country,
+			coordinates: payload.place.coordinates,
+			country: payload.place.country,
+			forecastTimeStamps: payload.forecastTimestamps,
 		};
 	});
 };
