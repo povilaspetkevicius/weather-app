@@ -6,6 +6,7 @@ import allActions from '../../actions';
 import axios from 'axios';
 import constants from '../../shared/index';
 import PlaceSelector from './PlaceSelector';
+import ForecastTimestamp from './ForecastTimestamp';
 
 const getSelectedPlace = (state) => state.places.selectedPlace;
 const getPlaces = (state) => state.places.places;
@@ -36,6 +37,15 @@ const getPlaceNamesAndCodes = createSelector([getPlaces], (places) => {
 	return places;
 });
 
+const containerStyle = {
+	display: 'flex',
+	flexFlow: 'row nowrap',
+	overflowX: 'scroll',
+	height: '90%',
+	maxWidth: '100%',
+	minWidth: '90%',
+};
+
 const fetchAdditionalPlaceInfo = (place) => {
 	return axios
 		.get(
@@ -64,7 +74,7 @@ function WeatherSection() {
 		}
 	}, [selectedPlace]);
 
-	console.log(placeDetails);
+	console.log(placeDetails, selectedPlace);
 
 	return (
 		<Container>
@@ -72,28 +82,21 @@ function WeatherSection() {
 				<PlaceSelector places={places} />
 			</Row>
 			{Object.keys(placeDetails).length > 0 && (
-				<div>
-					<Row>
+				<Row>
+					<h2>
 						{placeDetails.name}, {placeDetails.country}{' '}
 						{placeDetails.countryCode}
-					</Row>
-					<Row>
-						<input type="range" min="0" defaultValue="0" max="12" step="1" />
-					</Row>
-					<Row>
-						<span>Time</span>
-					</Row>
-					<Row>
-						<span>Temperature</span>
-					</Row>
-					<Row>
-						<span>Windspeed</span>
-					</Row>
-					<Row>
-						<i className={`wi wi-day-sunny display-1`}></i>
-					</Row>
-				</div>
+					</h2>
+				</Row>
 			)}
+			<Row>
+				<div style={containerStyle}>
+					{placeDetails.forecastTimeStamps &&
+						placeDetails.forecastTimeStamps.map((timestamp, i) => (
+							<ForecastTimestamp timestamp={timestamp} key={i} />
+						))}
+				</div>
+			</Row>
 		</Container>
 	);
 }
